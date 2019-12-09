@@ -181,8 +181,14 @@ int main() {
 
     t1.setSmooth(true);
     t2.setSmooth(true);
+    t2.setRepeated(false);
 
+    sf::Vector2f targetSize(windowWidth, windowHeight);
     Sprite background(t2);
+    background.setScale(
+            targetSize.x / background.getLocalBounds().width,
+            targetSize.y / background.getLocalBounds().height
+    );
 
     Animation sExplosion(t3, 0, 0, 256, 256, 48, 0.5);
     Animation sRock(t4, 0, 0, 64, 64, 16, 0.2);
