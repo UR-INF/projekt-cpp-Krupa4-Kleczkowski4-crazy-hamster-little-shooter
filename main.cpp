@@ -172,7 +172,7 @@ int main() {
     app.setFramerateLimit(60);
 
     Texture t1, t2, t3, t4, t5, t6, t7;
-    t1.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/spaceship.png");
+    t1.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/hamnster.png");
     t2.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/background.jpg");
     t3.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/explosions/type_C.png");
     t4.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/rock.png");
