@@ -20,7 +20,7 @@ add_executable(little_shooter
         images/fire_red.png
         images/rock.png
         images/rock_small.png
-        images/spaceship.png
+        images/hamster.png
         CMakeLists.txt
         main.cpp)
 

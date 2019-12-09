@@ -13,7 +13,7 @@
 # If nothing is specified, the version won't be checked (i.e. any version will be accepted).
 # example:
 #   find_package(SFML COMPONENTS ...)     // no specific version required
-#   find_package(SFML 2 COMPONENTS ...)   // any 2.x version
+#   find_package(SFML 2 COMPONENTS ...)   // any 2.xPosition version
 #   find_package(SFML 2.4 COMPONENTS ...) // version 2.4 or greater
 #
 # By default, the dynamic libraries of SFML will be found. To find the static ones instead,

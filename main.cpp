@@ -5,7 +5,7 @@
 
 using namespace sf;
 
-const int windowWidth = 1200;
+const int windowWidth = 1000;
 const int windowHeight = 800;
 
 float DEGTORAD = 0.017453f;
@@ -18,15 +18,15 @@ public:
 
     Animation() {}
 
-    Animation(Texture &t, int x, int y, int w, int h, int count, float Speed) {
+    Animation(Texture &textureRef, int xPosition, int yPosition, int width, int height, int count, float Speed) {
         Frame = 0;
         speed = Speed;
 
         for (int i = 0; i < count; i++)
-            frames.push_back(IntRect(x + i * w, y, w, h));
+            frames.push_back(IntRect(xPosition + i * width, yPosition, width, height));
 
-        sprite.setTexture(t);
-        sprite.setOrigin(w / 2, h / 2);
+        sprite.setTexture(textureRef);
+        sprite.setOrigin(width / 2, height / 2);
         sprite.setTextureRect(frames[0]);
     }
 
@@ -47,7 +47,7 @@ public:
 
 class Entity {
 public:
-    float x, y, dx, dy, R, angle;
+    float xPosition, yPosition, dx, dy, R, angle;
     bool life;
     std::string name;
     Animation anim;
@@ -58,8 +58,8 @@ public:
 
     void settings(Animation &a, int X, int Y, float Angle = 0, int radius = 1) {
         anim = a;
-        x = X;
-        y = Y;
+        xPosition = X;
+        yPosition = Y;
         angle = Angle;
         R = radius;
     }
@@ -67,15 +67,14 @@ public:
     virtual void update() {};
 
     void draw(RenderWindow &app) {
-        anim.sprite.setPosition(x, y);
+        anim.sprite.setPosition(xPosition, yPosition);
         anim.sprite.setRotation(angle + 90);
         app.draw(anim.sprite);
 
         CircleShape circle(R);
         circle.setFillColor(Color(255, 0, 0, 170));
-        circle.setPosition(x, y);
+        circle.setPosition(xPosition, yPosition);
         circle.setOrigin(R, R);
-        //app.draw(circle);
     }
 
     virtual ~Entity() {};
@@ -91,13 +90,13 @@ public:
     }
 
     void update() {
-        x += dx;
-        y += dy;
+        xPosition += dx;
+        yPosition += dy;
 
-        if (x > windowWidth) x = 0;
-        if (x < 0) x = windowWidth;
-        if (y > windowHeight) y = 0;
-        if (y < 0) y = windowHeight;
+        if (xPosition > windowWidth) xPosition = 0;
+        if (xPosition < 0) xPosition = windowWidth;
+        if (yPosition > windowHeight) yPosition = 0;
+        if (yPosition < 0) yPosition = windowHeight;
     }
 
 };
@@ -112,11 +111,11 @@ public:
     void update() {
         dx = cos(angle * DEGTORAD) * 6;
         dy = sin(angle * DEGTORAD) * 6;
-        // angle+=rand()%7-3;  /*try this*/
-        x += dx;
-        y += dy;
+        angle+=rand()%7-3;  /*try this*/
+        xPosition += dx;
+        yPosition += dy;
 
-        if (x > windowWidth || x < 0 || y > windowHeight || y < 0) life = 0;
+        if (xPosition > windowWidth || xPosition < 0 || yPosition > windowHeight || yPosition < 0) life = 0;
     }
 
 };
@@ -146,21 +145,21 @@ public:
             dy *= maxSpeed / speed;
         }
 
-        x += dx;
-        y += dy;
+        xPosition += dx;
+        yPosition += dy;
 
-        if (x > windowWidth) x = 0;
-        if (x < 0) x = windowWidth;
-        if (y > windowHeight) y = 0;
-        if (y < 0) y = windowHeight;
+        if (xPosition > windowWidth) xPosition = 0;
+        if (xPosition < 0) xPosition = windowWidth;
+        if (yPosition > windowHeight) yPosition = 0;
+        if (yPosition < 0) yPosition = windowHeight;
     }
 
 };
 
 
 bool isCollide(Entity *a, Entity *b) {
-    return (b->x - a->x) * (b->x - a->x) +
-           (b->y - a->y) * (b->y - a->y) <
+    return (b->xPosition - a->xPosition) * (b->xPosition - a->xPosition) +
+           (b->yPosition - a->yPosition) * (b->yPosition - a->yPosition) <
            (a->R + b->R) * (a->R + b->R);
 }
 
@@ -168,11 +167,11 @@ bool isCollide(Entity *a, Entity *b) {
 int main() {
     srand(time(0));
 
-    RenderWindow app(VideoMode(windowWidth, windowHeight), "Asteroids!");
+    RenderWindow app(VideoMode(windowWidth, windowHeight), "Hamster vs asteroids");
     app.setFramerateLimit(60);
 
     Texture t1, t2, t3, t4, t5, t6, t7;
-    t1.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/hamnster.png");
+    t1.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/hamster.png");
     t2.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/background.jpg");
     t3.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/explosions/type_C.png");
     t4.loadFromFile("/home/a-krupa/CLionProjects/little-shooter/images/rock.png");
@@ -216,7 +215,7 @@ int main() {
             if (event.type == Event::KeyPressed)
                 if (event.key.code == Keyboard::Space) {
                     bullet *b = new bullet();
-                    b->settings(sBullet, p->x, p->y, p->angle, 10);
+                    b->settings(sBullet, p->xPosition, p->yPosition, p->angle, 10);
                     entities.push_back(b);
                 }
         }
@@ -235,7 +234,7 @@ int main() {
                         b->life = false;
 
                         Entity *e = new Entity();
-                        e->settings(sExplosion, a->x, a->y);
+                        e->settings(sExplosion, a->xPosition, a->yPosition);
                         e->name = "explosion";
                         entities.push_back(e);
 
@@ -243,7 +242,7 @@ int main() {
                         for (int i = 0; i < 2; i++) {
                             if (a->R == 15) continue;
                             Entity *e = new asteroid();
-                            e->settings(sRock_small, a->x, a->y, rand() % 360, 15);
+                            e->settings(sRock_small, a->xPosition, a->yPosition, rand() % 360, 15);
                             entities.push_back(e);
                         }
 
@@ -254,7 +253,7 @@ int main() {
                         b->life = false;
 
                         Entity *e = new Entity();
-                        e->settings(sExplosion_ship, a->x, a->y);
+                        e->settings(sExplosion_ship, a->xPosition, a->yPosition);
                         e->name = "explosion";
                         entities.push_back(e);
 

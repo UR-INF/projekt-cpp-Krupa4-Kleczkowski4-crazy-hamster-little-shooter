@@ -123,13 +123,13 @@
 		<Unit filename="/home/a-krupa/CLionProjects/little-shooter/images/fire_red.png">
 			<Option target="little_shooter"/>
 		</Unit>
+		<Unit filename="/home/a-krupa/CLionProjects/little-shooter/images/hamster.png">
+			<Option target="little_shooter"/>
+		</Unit>
 		<Unit filename="/home/a-krupa/CLionProjects/little-shooter/images/rock.png">
 			<Option target="little_shooter"/>
 		</Unit>
 		<Unit filename="/home/a-krupa/CLionProjects/little-shooter/images/rock_small.png">
-			<Option target="little_shooter"/>
-		</Unit>
-		<Unit filename="/home/a-krupa/CLionProjects/little-shooter/images/spaceship.png">
 			<Option target="little_shooter"/>
 		</Unit>
 		<Unit filename="/home/a-krupa/CLionProjects/little-shooter/main.cpp">
