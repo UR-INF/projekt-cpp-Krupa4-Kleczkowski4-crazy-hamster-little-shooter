@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/a-krupa/CLionProjects/little-shooter/main.cpp
+SFML/Graphics.hpp
+-
+ctime
+-
+list
+-
+cmath
+-
+
