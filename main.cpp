@@ -5,8 +5,8 @@
 
 using namespace sf;
 
-const int windowWidth = 1000;
-const int windowHeight = 800;
+const int WINDOW_WIDTH = 1000;
+const int WINDOW_HEIGHT = 800;
 
 float DEGTORAD = 0.017453f;
 
@@ -81,31 +81,31 @@ public:
 };
 
 
-class asteroid : public Entity {
+class Asteroid : public Entity {
 public:
-    asteroid() {
+    Asteroid() {
         dx = rand() % 8 - 4;
         dy = rand() % 8 - 4;
-        name = "asteroid";
+        name = "Asteroid";
     }
 
     void update() {
         xPosition += dx;
         yPosition += dy;
 
-        if (xPosition > windowWidth) xPosition = 0;
-        if (xPosition < 0) xPosition = windowWidth;
-        if (yPosition > windowHeight) yPosition = 0;
-        if (yPosition < 0) yPosition = windowHeight;
+        if (xPosition > WINDOW_WIDTH) xPosition = 0;
+        if (xPosition < 0) xPosition = WINDOW_WIDTH;
+        if (yPosition > WINDOW_HEIGHT) yPosition = 0;
+        if (yPosition < 0) yPosition = WINDOW_HEIGHT;
     }
 
 };
 
 
-class bullet : public Entity {
+class Bullet : public Entity {
 public:
-    bullet() {
-        name = "bullet";
+    Bullet() {
+        name = "Bullet";
     }
 
     void update() {
@@ -115,18 +115,18 @@ public:
         xPosition += dx;
         yPosition += dy;
 
-        if (xPosition > windowWidth || xPosition < 0 || yPosition > windowHeight || yPosition < 0) life = 0;
+        if (xPosition > WINDOW_WIDTH || xPosition < 0 || yPosition > WINDOW_HEIGHT || yPosition < 0) life = 0;
     }
 
 };
 
 
-class player : public Entity {
+class Hamster : public Entity {
 public:
     bool thrust;
 
-    player() {
-        name = "player";
+    Hamster() {
+        name = "Hamster";
     }
 
     void update() {
@@ -148,10 +148,10 @@ public:
         xPosition += dx;
         yPosition += dy;
 
-        if (xPosition > windowWidth) xPosition = 0;
-        if (xPosition < 0) xPosition = windowWidth;
-        if (yPosition > windowHeight) yPosition = 0;
-        if (yPosition < 0) yPosition = windowHeight;
+        if (xPosition > WINDOW_WIDTH) xPosition = 0;
+        if (xPosition < 0) xPosition = WINDOW_WIDTH;
+        if (yPosition > WINDOW_HEIGHT) yPosition = 0;
+        if (yPosition < 0) yPosition = WINDOW_HEIGHT;
     }
 
 };
@@ -167,7 +167,7 @@ bool isCollide(Entity *a, Entity *b) {
 int main() {
     srand(time(0));
 
-    RenderWindow app(VideoMode(windowWidth, windowHeight), "Hamster vs asteroids");
+    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Hamster vs asteroids");
     app.setFramerateLimit(60);
 
     Texture t1, t2, t3, t4, t5, t6, t7;
@@ -183,7 +183,7 @@ int main() {
     t2.setSmooth(true);
     t2.setRepeated(false);
 
-    sf::Vector2f targetSize(windowWidth, windowHeight);
+    sf::Vector2f targetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     Sprite background(t2);
     background.setScale(
             targetSize.x / background.getLocalBounds().width,
@@ -202,13 +202,13 @@ int main() {
     std::list<Entity *> entities;
 
     for (int i = 0; i < 15; i++) {
-        asteroid *a = new asteroid();
-        a->settings(sRock, rand() % windowWidth, rand() % windowHeight, rand() % 360, 25);
+        Asteroid *a = new Asteroid();
+        a->settings(sRock, rand() % WINDOW_WIDTH, rand() % WINDOW_HEIGHT, rand() % 360, 25);
         entities.push_back(a);
     }
 
-    player *p = new player();
-    p->settings(sPlayer, 200, 200, 0, 20);
+    Hamster *p = new Hamster();
+    p->settings(sPlayer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 20);
     entities.push_back(p);
 
     /////main loop/////
@@ -220,21 +220,21 @@ int main() {
 
             if (event.type == Event::KeyPressed)
                 if (event.key.code == Keyboard::Space) {
-                    bullet *b = new bullet();
+                    Bullet *b = new Bullet();
                     b->settings(sBullet, p->xPosition, p->yPosition, p->angle, 10);
                     entities.push_back(b);
                 }
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Right)) p->angle += 3;
-        if (Keyboard::isKeyPressed(Keyboard::Left)) p->angle -= 3;
-        if (Keyboard::isKeyPressed(Keyboard::Up)) p->thrust = true;
+        if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D)) p->angle += 3;
+        if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A)) p->angle -= 3;
+        if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W)) p->thrust = true;
         else p->thrust = false;
 
 
         for (auto a:entities)
             for (auto b:entities) {
-                if (a->name == "asteroid" && b->name == "bullet")
+                if (a->name == "Asteroid" && b->name == "Bullet")
                     if (isCollide(a, b)) {
                         a->life = false;
                         b->life = false;
@@ -247,14 +247,14 @@ int main() {
 
                         for (int i = 0; i < 2; i++) {
                             if (a->R == 15) continue;
-                            Entity *e = new asteroid();
+                            Entity *e = new Asteroid();
                             e->settings(sRock_small, a->xPosition, a->yPosition, rand() % 360, 15);
                             entities.push_back(e);
                         }
 
                     }
 
-                if (a->name == "player" && b->name == "asteroid")
+                if (a->name == "Hamster" && b->name == "Asteroid")
                     if (isCollide(a, b)) {
                         b->life = false;
 
@@ -263,7 +263,7 @@ int main() {
                         e->name = "explosion";
                         entities.push_back(e);
 
-                        p->settings(sPlayer, windowWidth / 2, windowHeight / 2, 0, 20);
+                        p->settings(sPlayer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 20);
                         p->dx = 0;
                         p->dy = 0;
                     }
@@ -279,8 +279,8 @@ int main() {
                 if (e->anim.isEnd()) e->life = 0;
 
         if (rand() % 150 == 0) {
-            asteroid *a = new asteroid();
-            a->settings(sRock, 0, rand() % windowHeight, rand() % 360, 25);
+            Asteroid *a = new Asteroid();
+            a->settings(sRock, 0, rand() % WINDOW_HEIGHT, rand() % 360, 25);
             entities.push_back(a);
         }
 
