@@ -9,3 +9,10 @@ Gracz:
 * może wykonać serię strzałów przez przytrzymanie przycisku strzału
 * może poruszać się przy użyciu strzałek lub przycisków A, W, D
 * gracz może przedostawać się na przeciwną stronę galaktyki przenikając przez krańce ekranu
+
+Asteroidy:
+* posiadają dwa rodzaje. Duże asteroidy, które po zestrzeleniu rozbijają się na dwie mniejsze części. Małe asteroidy po zestrzeleniu wybuchają i znikają z mapy.
+* po zestrzeleniu asteroidu następuje efektowna animacja przedstawiająca wybuch
+
+Pociski:
+* część pocisków przecina tor lotu w linii prostej natomiast część ruchem zakłóconym
